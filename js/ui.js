@@ -120,7 +120,7 @@ export function renderTodoList(todos) {
         </div>
         <div class="todo-actions">
           ${!isDone ? `<button data-id="${todo.id}" class="btn btn-outline-secondary btn-sm done-btn">done</button>` : ""}
-          <button data-id="${todo.id}" class="btn btn-outline-secondary btn-sm edit-btn">edit</button>
+          ${!isDone ? `<button data-id="${todo.id}" class="btn btn-outline-secondary btn-sm edit-btn">edit</button>` : ""}
           <button data-id="${todo.id}" class="btn btn-sm btn-danger-soft delete-btn">delete</button>
         </div>
       </article>
