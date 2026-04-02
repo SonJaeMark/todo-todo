@@ -37,8 +37,10 @@ export async function refreshAccessToken() {
 
         const response = await fetch(`${BASE_URL}/auth/refresh`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refreshToken: state.refreshToken })
+          // Backend expects the refresh token as a raw string body.
+          // (Using JSON here causes the backend to reject the request with 403.)
+          headers: { "Content-Type": "text/plain" },
+          body: state.refreshToken
         });
 
         if (!response.ok) {
@@ -112,7 +114,7 @@ export async function fetchWithAuth(url, options = {}) {
     throw error;
   }
 
-  if (response.status !== 401 && response.status !== 403) {
+  if (response.status !== 403) {
     return response;
   }
 
@@ -133,7 +135,7 @@ export async function fetchWithAuth(url, options = {}) {
     throw error;
   }
 
-  if (response.status === 401 || response.status === 403) {
+  if (response.status === 403) {
     await logoutViaHandler();
     throw new Error("unauthorized");
   }
