@@ -1,5 +1,5 @@
 import { BASE_URL } from "./config.js";
-import { apiCall } from "./api.js";
+import { fetchWithAuth } from "./api.js";
 import { elements } from "./dom.js";
 import { renderTodoList, showTodoMessage } from "./ui.js";
 
@@ -9,7 +9,7 @@ function sortTodos(todos = []) {
 
 export async function fetchTodos() {
   try {
-    const response = await apiCall(BASE_URL, { method: "GET" });
+    const response = await fetchWithAuth(BASE_URL, { method: "GET" });
     if (!response.ok) {
       renderTodoList([]);
       showTodoMessage("could not fetch tasks", true);
@@ -31,7 +31,7 @@ export async function createTodo(task) {
   }
 
   try {
-    const response = await apiCall(`${BASE_URL}/create`, {
+    const response = await fetchWithAuth(`${BASE_URL}/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ task: task.trim() })
@@ -52,7 +52,7 @@ export async function createTodo(task) {
 
 export async function updateTodoTask(id, newTask) {
   try {
-    const response = await apiCall(`${BASE_URL}/update/${id}`, {
+    const response = await fetchWithAuth(`${BASE_URL}/update/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ task: newTask })
@@ -72,7 +72,7 @@ export async function updateTodoTask(id, newTask) {
 
 export async function markTodoDone(id) {
   try {
-    const response = await apiCall(`${BASE_URL}/done/${id}`, { method: "PUT" });
+    const response = await fetchWithAuth(`${BASE_URL}/done/${id}`, { method: "PUT" });
     if (!response.ok) {
       showTodoMessage("could not mark done", true);
       return;
@@ -87,7 +87,7 @@ export async function markTodoDone(id) {
 
 export async function deleteTodo(id) {
   try {
-    const response = await apiCall(`${BASE_URL}/delete/${id}`, { method: "DELETE" });
+    const response = await fetchWithAuth(`${BASE_URL}/delete/${id}`, { method: "DELETE" });
     if (!response.ok) {
       showTodoMessage("delete failed", true);
       return;

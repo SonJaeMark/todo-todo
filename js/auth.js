@@ -1,6 +1,6 @@
 import { BASE_URL } from "./config.js";
 import { elements } from "./dom.js";
-import { loadSession, saveSession, clearSession } from "./storage.js";
+import { loadSession, clearSession } from "./storage.js";
 import { state, setSessionState, clearSessionState } from "./state.js";
 import { getTokenExpiry } from "./utils.js";
 import {
@@ -14,21 +14,13 @@ import {
 } from "./ui.js";
 import { fetchTodos } from "./todos.js";
 import { logoutRequest } from "./api.js";
+import { persistSession } from "./sessionPersist.js";
 
 function clearRefreshTokenExpiryTimer() {
   if (state.refreshTokenExpiryTimer) {
     clearTimeout(state.refreshTokenExpiryTimer);
     state.refreshTokenExpiryTimer = null;
   }
-}
-
-function persistSession() {
-  saveSession({
-    accessToken: state.accessToken,
-    refreshToken: state.refreshToken,
-    username: state.currentUsername,
-    userId: state.userId
-  });
 }
 
 export function promptSessionExpiry() {
